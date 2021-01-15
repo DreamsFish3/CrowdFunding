@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+  <!--设置context的配置文件-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring-persist-*.xml</param-value>
+  </context-param>
+  <!--启动服务器时装配ContextLoaderListener对象，加载context的配置文件，初始化IOC容器-->
+  <!--ContextLoaderListener作用：
+          创建所有IOC容器的父接口ApplicationContext,把IOC容器传入到ServletContext域对象中-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <!--配置过滤器-->
+  <filter>
+    <filter-name>characterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <!--指定字符集-->
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <!--强制请求设置字符集-->
+    <init-param>
+      <param-name>forceRequestEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <!--强制响应设置字符集-->
+    <init-param>
+      <param-name>forceResponseEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <!--这个Filter执行的顺序在所有其他Filter的前面-->
+  <filter-mapping>
+    <filter-name>characterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!--配置前端控制器-->
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring-web-mvc.xml</param-value>
+    </init-param>
+    <!--Servlet的默认生命周期中，创建对象是在第一次接收到请求时，
+        而DispatcherServlet创建对象后有大量初始化框架的操作，不适合在第一次请求时来做，
+        所以用load-on-startup来设置优先级-->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <!--只配置请求扩展名，其他css、js等静态资源不用特殊处理，还可以实现伪静态效果，但不符合RESTFUL风格-->
+    <url-pattern>*.html</url-pattern>
+    <!--如果ajdx请求的扩展名为html，实际响应返回的是json数据,就会不匹配，出现406错误-->
+    <url-pattern>*.json</url-pattern>
+  </servlet-mapping>
+</web-app>
