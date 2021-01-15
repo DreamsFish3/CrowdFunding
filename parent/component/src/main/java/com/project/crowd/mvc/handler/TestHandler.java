@@ -3,7 +3,6 @@ package com.project.crowd.mvc.handler;
 import com.project.crowd.entity.Admin;
 import com.project.crowd.entity.Student;
 import com.project.crowd.service.api.AdminService;
-import com.project.crowd.util.CrowdUtil;
 import com.project.crowd.util.ResultEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class TestHandler {
         modelMap.addAttribute("adminList", adminList);
 
         // 测试异常
-        System.out.println(10 / 0);
+        /*System.out.println(10 / 0);*/
 
         // 测试判断请求类型
         /*boolean judgeResult = CrowdUtil.judgeRequestType(request);

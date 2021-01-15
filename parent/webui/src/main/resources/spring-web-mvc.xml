@@ -39,4 +39,20 @@
     <mvc:view-controller path="/admin/to/login/page.html" view-name="admin-login"/>
     <!--因为重定向是二次请求，浏览器不能直接访问WEB-INF下的文件，所以给第二次请求的地址设置视图控制器-->
     <mvc:view-controller path="/admin/to/main/page.html" view-name="admin-main"/>
+
+    <!--注册拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--配置要拦截的资源-->
+            <!--/*表示一层路径，/**表示多层路径-->
+            <mvc:mapping path="/**"/>
+            <!--配置不拦截的资源-->
+            <!--不拦截重定向返回的登录路径和请求登录的路径，以及请求退出登录的路径-->
+            <mvc:exclude-mapping path="/admin/to/login/page.html"/>
+            <mvc:exclude-mapping path="/admin/do/login.html"/>
+            <mvc:exclude-mapping path="/admin/do/logout.html"/>
+            <!--配置拦截器的类-->
+            <bean class="com.project.crowd.mvc.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>
