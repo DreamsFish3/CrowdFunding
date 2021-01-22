@@ -28,4 +28,7 @@ public interface AdminMapper {
     int updateByPrimaryKeySelective(Admin record);
 
     int updateByPrimaryKey(Admin record);
+
+    // 自定义根据关键字搜索查询的方法
+    List<Admin> selectAdminByKeyword(String keyword);
 }

@@ -2,10 +2,12 @@ package com.project.crowd.mvc.config;
 
 import com.google.gson.Gson;
 import com.project.crowd.constant.CrowdConstant;
+import com.project.crowd.exception.AccessForbiddenException;
+import com.project.crowd.exception.LoginAcctAlreadyInUseForSaveException;
+import com.project.crowd.exception.LoginAcctAlreadyInUseForUpdateException;
 import com.project.crowd.exception.LoginFailedException;
 import com.project.crowd.util.CrowdUtil;
 import com.project.crowd.util.ResultEntity;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -67,6 +69,53 @@ public class CrowdExceptionResolver {
         String viewName = "admin-login";
         return commonResolve(viewName, exception, request, response);
     }
+
+    /**
+     * 该方法关联的异常类型为自定义的用户没有登录就访问保护资源的异常
+     * @param exception
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @ExceptionHandler(value = AccessForbiddenException.class)
+    public ModelAndView resolveAccessForbiddenException(AccessForbiddenException exception,HttpServletRequest request,HttpServletResponse response) throws IOException {
+        // 直接设置好要跳转的视图名称，再调用通用方法处理异常
+        String viewName = "admin-login";
+        return commonResolve(viewName, exception, request, response);
+    }
+
+    /**
+     * 该方法关联的异常类型为自定义的保存用户时的用户名重复异常
+     * @param exception
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @ExceptionHandler(value = LoginAcctAlreadyInUseForSaveException.class)
+    public ModelAndView resolveLoginAcctAlreadyInUseForSaveException(LoginAcctAlreadyInUseForSaveException exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 直接设置好要跳转的视图名称，再调用通用方法处理异常
+        String viewName = "admin-add";
+        return commonResolve(viewName, exception, request, response);
+    }
+
+    /**
+     * 该方法关联的异常类型为自定义的更新用户时的用户名重复异常
+     * @param exception
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @ExceptionHandler(value = LoginAcctAlreadyInUseForUpdateException.class)
+    public ModelAndView resolveLoginAcctAlreadyInUseForUpdateException(LoginAcctAlreadyInUseForUpdateException exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        // 因为是Ajax请求，不跳转视图，把异常信息写入响应体返回
+        return commonResolve(null, exception, request, response);
+    }
+
+
 
     /**
      * 通用的异常处理方法

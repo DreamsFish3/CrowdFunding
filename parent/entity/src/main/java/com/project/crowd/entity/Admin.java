@@ -1,6 +1,7 @@
 package com.project.crowd.entity;
 
 public class Admin {
+
     private Integer id;
 
     private String loginAcct;

@@ -30,6 +30,7 @@
                 <!--key:指定异常全类名-->
                 <!--标签体中写对应的视图(这个值要通过视图解析器-->
                 <prop key="java.lang.Exception">system-error</prop>
+                <prop key="com.project.crowd.exception.AccessForbiddenException">admin-login</prop>
             </props>
         </property>
     </bean>
@@ -39,6 +40,8 @@
     <mvc:view-controller path="/admin/to/login/page.html" view-name="admin-login"/>
     <!--因为重定向是二次请求，浏览器不能直接访问WEB-INF下的文件，所以给第二次请求的地址设置视图控制器-->
     <mvc:view-controller path="/admin/to/main/page.html" view-name="admin-main"/>
+    
+    <mvc:view-controller path="/admin/to/add/page.html" view-name="admin-add"/>
 
     <!--注册拦截器-->
     <mvc:interceptors>

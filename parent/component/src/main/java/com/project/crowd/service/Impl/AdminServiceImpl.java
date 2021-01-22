@@ -1,15 +1,22 @@
 package com.project.crowd.service.Impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.project.crowd.constant.CrowdConstant;
 import com.project.crowd.entity.Admin;
 import com.project.crowd.entity.AdminExample;
+import com.project.crowd.exception.LoginAcctAlreadyInUseForSaveException;
+import com.project.crowd.exception.LoginAcctAlreadyInUseForUpdateException;
 import com.project.crowd.exception.LoginFailedException;
 import com.project.crowd.mapper.AdminMapper;
 import com.project.crowd.service.api.AdminService;
 import com.project.crowd.util.CrowdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +31,27 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void saveAdmin(Admin admin) {
-        adminMapper.insert(admin);
+
+        // 1、密码加密
+        String userPswd = admin.getUserPswd();
+        userPswd = CrowdUtil.md5(userPswd);
+        admin.setUserPswd(userPswd);
+
+        //生成创建时间
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String createTime = format.format(date);
+        admin.setCreateTime(createTime);
+
+        try {
+            adminMapper.insert(admin);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 如果捕获的异常是字段重复异常，抛出用户名重复异常
+            if (e instanceof DuplicateKeyException) {
+                throw new LoginAcctAlreadyInUseForSaveException(CrowdConstant.MESSAGE_LOGIN_ACCT_ALREADY_IN_USE);
+            }
+        }
     }
 
     @Override
@@ -32,6 +59,12 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.selectByExample(new AdminExample());
     }
 
+    /**
+     * 对请求发送过来的账号和密码，和数据库进行匹配，匹配成功返回Admin对象，否则抛出异常
+     * @param loginAcct
+     * @param userPswd
+     * @return
+     */
     @Override
     public Admin getAdminByLoginAcct(String loginAcct, String userPswd) {
 
@@ -77,4 +110,46 @@ public class AdminServiceImpl implements AdminService {
         // 8、如果一致则返回Admin对象
         return admin;
     }
+
+    @Override
+    public PageInfo<Admin> getPageInfo(String keyword, Integer pageNum, Integer pageSize) {
+        // 1、调用PageHelper的开启分页功能方法
+        PageHelper.startPage(pageNum, pageSize);
+
+        // 2、执行查询
+        List<Admin> list = adminMapper.selectAdminByKeyword(keyword);
+
+        // 3、封装到PageInfo对象中
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public void remove(Integer adminId) {
+        adminMapper.deleteByPrimaryKey(adminId);
+    }
+
+    @Override
+    public Admin getAdminById(Integer adminId) {
+
+        return adminMapper.selectByPrimaryKey(adminId);
+
+    }
+
+    @Override
+    public void update(Admin admin) {
+
+        // Selective表示有选择的更新，对于null值的字段不更新
+        try {
+            adminMapper.updateByPrimaryKeySelective(admin);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            // 如果捕获的异常是字段重复异常，抛出用户名重复异常
+            if (e instanceof DuplicateKeyException) {
+                throw new LoginAcctAlreadyInUseForUpdateException(CrowdConstant.MESSAGE_LOGIN_ACCT_ALREADY_IN_USE);
+            }
+        }
+    }
+
+
 }

@@ -147,6 +147,6 @@
 
     <br/>
     <br/>
-    <a href="${pageContext.request.contextPath}/admin/to/login/page.html">登录页面</a>
+    <a href="admin/to/login/page.html">登录页面</a>
 </body>
 </html>
