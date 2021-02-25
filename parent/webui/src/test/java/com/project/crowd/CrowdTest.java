@@ -1,8 +1,11 @@
 package com.project.crowd;
 
 import com.project.crowd.entity.Admin;
+import com.project.crowd.entity.Role;
 import com.project.crowd.mapper.AdminMapper;
+import com.project.crowd.mapper.RoleMapper;
 import com.project.crowd.service.api.AdminService;
+import com.project.crowd.service.api.RoleService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -31,6 +34,9 @@ public class CrowdTest {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private RoleMapper roleMapper;
 
     @Test
     public void testConnection() throws SQLException {
@@ -66,6 +72,13 @@ public class CrowdTest {
     public void test() {
         for (int i = 50; i < 100; i++) {
             adminMapper.insert(new Admin(null, "loginAcct" + i, "userPswd" + i, "userName" + i, "email" + i, null));
+        }
+    }
+
+    @Test
+    public void testRoleSave() {
+        for (int i = 0; i < 50; i++) {
+            roleMapper.insert(new Role(null, "role" + i));
         }
     }
 }

@@ -36,7 +36,7 @@ public class CrowdExceptionResolver {
     @ExceptionHandler(value = NullPointerException.class)
     public ModelAndView resolveNullPointerException(NullPointerException exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 直接设置好要跳转的视图名称，再调用通用方法处理异常
-        String viewName = "system-error";
+        String viewName = "system/system-error";
         return commonResolve(viewName, exception, request, response);
     }
 
@@ -51,7 +51,7 @@ public class CrowdExceptionResolver {
     @ExceptionHandler(value = ArithmeticException.class)
     public ModelAndView resolveMathException(ArithmeticException exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 直接设置好要跳转的视图名称，再调用通用方法处理异常
-        String viewName = "system-error";
+        String viewName = "system/system-error";
         return commonResolve(viewName, exception, request, response);
     }
 
@@ -66,7 +66,7 @@ public class CrowdExceptionResolver {
     @ExceptionHandler(value = LoginFailedException.class)
     public ModelAndView resolveLoginFailedException(LoginFailedException exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 直接设置好要跳转的视图名称，再调用通用方法处理异常
-        String viewName = "admin-login";
+        String viewName = "admin/admin-login";
         return commonResolve(viewName, exception, request, response);
     }
 
@@ -81,7 +81,7 @@ public class CrowdExceptionResolver {
     @ExceptionHandler(value = AccessForbiddenException.class)
     public ModelAndView resolveAccessForbiddenException(AccessForbiddenException exception,HttpServletRequest request,HttpServletResponse response) throws IOException {
         // 直接设置好要跳转的视图名称，再调用通用方法处理异常
-        String viewName = "admin-login";
+        String viewName = "admin/admin-login";
         return commonResolve(viewName, exception, request, response);
     }
 
@@ -96,7 +96,7 @@ public class CrowdExceptionResolver {
     @ExceptionHandler(value = LoginAcctAlreadyInUseForSaveException.class)
     public ModelAndView resolveLoginAcctAlreadyInUseForSaveException(LoginAcctAlreadyInUseForSaveException exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 直接设置好要跳转的视图名称，再调用通用方法处理异常
-        String viewName = "admin-add";
+        String viewName = "admin/admin-add";
         return commonResolve(viewName, exception, request, response);
     }
 
@@ -111,10 +111,16 @@ public class CrowdExceptionResolver {
     @ExceptionHandler(value = LoginAcctAlreadyInUseForUpdateException.class)
     public ModelAndView resolveLoginAcctAlreadyInUseForUpdateException(LoginAcctAlreadyInUseForUpdateException exception, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        // 因为是Ajax请求，不跳转视图，把异常信息写入响应体返回
-        return commonResolve(null, exception, request, response);
+        String viewName = "system/system-error";
+        return commonResolve(viewName, exception, request, response);
     }
 
+    @ExceptionHandler(value = Exception.class)
+    public ModelAndView resolveException(Exception exception,HttpServletRequest request,HttpServletResponse response) throws IOException {
+        // 直接设置好要跳转的视图名称，再调用通用方法处理异常
+        String viewName = "admin/admin-login";
+        return commonResolve(viewName, exception, request, response);
+    }
 
 
     /**

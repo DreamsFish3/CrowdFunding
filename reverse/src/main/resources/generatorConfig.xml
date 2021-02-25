@@ -12,7 +12,7 @@
         <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
         <jdbcConnection
                 driverClass="com.mysql.jdbc.Driver"
-                connectionURL="jdbc:mysql://192.168.60.130:3306/project_crowd"
+                connectionURL="jdbc:mysql://localhost:3306/project_crowd"
                 userId="root"
                 password="622853">
         </jdbcConnection>
@@ -43,6 +43,6 @@
             <property name="enableSubPackages" value="false" />
         </javaClientGenerator>
         <!-- 数据库表名字和我们的 entity 类对应的映射指定 -->
-        <table tableName="t_admin" domainObjectName="Admin" />
+        <table tableName="t_auth" domainObjectName="Auth" />
     </context>
 </generatorConfiguration>

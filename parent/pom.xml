@@ -53,7 +53,8 @@
                 <artifactId>cglib</artifactId>
                 <version>2.2</version>
             </dependency>
-            <!-- 数据库依赖 --> <!-- MySQL 驱动 -->
+            <!-- 数据库依赖 -->
+            <!-- MySQL 驱动 -->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>

@@ -13,6 +13,7 @@ import com.project.crowd.service.api.AdminService;
 import com.project.crowd.util.CrowdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -29,15 +30,21 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private AdminMapper adminMapper;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
     public void saveAdmin(Admin admin) {
 
         // 1、密码加密
         String userPswd = admin.getUserPswd();
-        userPswd = CrowdUtil.md5(userPswd);
+        // JDK的md5加密
+        // userPswd = CrowdUtil.md5(userPswd);
+        // security提供的加密
+        userPswd = bCryptPasswordEncoder.encode(userPswd);
         admin.setUserPswd(userPswd);
 
-        //生成创建时间
+        // 生成创建时间
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String createTime = format.format(date);
@@ -116,7 +123,7 @@ public class AdminServiceImpl implements AdminService {
         // 1、调用PageHelper的开启分页功能方法
         PageHelper.startPage(pageNum, pageSize);
 
-        // 2、执行查询
+        // 2、执行查询（使用自定义的根据关键字查询的SQL语句）
         List<Admin> list = adminMapper.selectAdminByKeyword(keyword);
 
         // 3、封装到PageInfo对象中
@@ -126,6 +133,16 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void remove(Integer adminId) {
         adminMapper.deleteByPrimaryKey(adminId);
+    }
+
+    @Override
+    public void removeList(List<Integer> adminArray) {
+
+        AdminExample example = new AdminExample();
+        AdminExample.Criteria criteria = example.createCriteria();
+        criteria.andIdIn(adminArray);
+
+        adminMapper.deleteByExample(example);
     }
 
     @Override
@@ -150,6 +167,37 @@ public class AdminServiceImpl implements AdminService {
             }
         }
     }
+
+    @Override
+    public void saveAdminRoleRelationship(Integer adminId, List<Integer> roleIdList) {
+
+        // 先根据adminId删除旧的关联数据
+        adminMapper.deleteOldRelationship(adminId);
+
+        // 根据adminId和roleIdList添加新的关联数据
+        // 因为roleIdList有可能为空，为空就不需要执行保存了
+        if (roleIdList != null && roleIdList.size() > 0) {
+            adminMapper.insertNewRelationship(adminId, roleIdList);
+        }
+    }
+
+    @Override
+    public Admin getAdminByLoginAcct(String username) {
+
+        AdminExample example = new AdminExample();
+
+        AdminExample.Criteria criteria = example.createCriteria();
+
+        criteria.andLoginAcctEqualTo(username);
+
+        List<Admin> adminList = adminMapper.selectByExample(example);
+
+        Admin admin = adminList.get(0);
+
+        return admin;
+    }
+
+
 
 
 }

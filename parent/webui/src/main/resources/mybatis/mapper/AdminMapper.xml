@@ -70,6 +70,7 @@
   <sql id="Base_Column_List" >
     id, login_acct, user_pswd, user_name, email, create_time
   </sql>
+
   <!--自定义根据关键字搜索查询-->
   <select id="selectAdminByKeyword" resultMap="BaseResultMap">
     select
@@ -80,7 +81,6 @@
         user_name like concat("%",#{keyword},"%") or
         email like concat("%",#{keyword},"%")
   </select>
-
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.project.crowd.entity.AdminExample" >
     select
     <if test="distinct" >
@@ -101,6 +101,12 @@
     from t_admin
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <!--自定义删除旧的用户角色关联-->
+  <delete id="deleteOldRelationship">
+    delete from inner_admin_role
+    where admin_id = #{adminId}
+  </delete>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from t_admin
     where id = #{id,jdbcType=INTEGER}
@@ -111,6 +117,15 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
+
+  <!--自定义保存新的用户角色关联-->
+  <insert id="insertNewRelationship">
+    insert into inner_admin_role(admin_id,role_id) values
+    /*遍历roleIdList，每个值为roleId，结果用逗号隔开*/
+    <foreach collection="roleIdList" item="roleId" separator=",">
+      (#{adminId},#{roleId})
+    </foreach>
+  </insert>
   <insert id="insert" parameterType="com.project.crowd.entity.Admin" >
     insert into t_admin (id, login_acct, user_pswd, 
       user_name, email, create_time

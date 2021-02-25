@@ -31,4 +31,10 @@ public interface AdminMapper {
 
     // 自定义根据关键字搜索查询的方法
     List<Admin> selectAdminByKeyword(String keyword);
+
+    // 自定义根据adminId删除关联表中对应的所有角色关联的方法
+    void deleteOldRelationship(Integer adminId);
+
+    // 自定义根据adminId在关联表中保存新的角色关联的方法
+    void insertNewRelationship(@Param("adminId") Integer adminId, @Param("roleIdList") List<Integer> roleIdList);
 }

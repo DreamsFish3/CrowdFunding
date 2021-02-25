@@ -148,5 +148,8 @@
     <br/>
     <br/>
     <a href="admin/to/login/page.html">登录页面</a>
+    <br/>
+    <br/>
+    <a href="http://localhost:8080/spring_security/index.jsp">security登录</a>
 </body>
 </html>
