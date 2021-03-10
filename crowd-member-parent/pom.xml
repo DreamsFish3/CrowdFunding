@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.project.crowd</groupId>
+    <artifactId>crowd-member-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>member01-eureka</module>
+        <module>member02-entity</module>
+        <module>member03-mysql-provider</module>
+        <module>member04-redis-provider</module>
+        <module>member05-authentication-consumer</module>
+        <module>member06-project-consumer</module>
+        <module>member07-order-consumer</module>
+        <module>member08-pay-consumer</module>
+    </modules>
+    <packaging>pom</packaging>
+
+
+</project>
