@@ -1,0 +1,31 @@
+server: # 因为HTTP默认80端口，所以设置后，网关地址为“http://localhost”就可以访问会员首页
+  port: 80
+
+spring:
+  application:
+    name: crowd-zuul
+  redis: # 设置Redis所在的ip地址，有密码的需要验证密码
+    host: localhost
+    password: 123456
+  session: # springsession配置存储类型为Redis
+    store-type: redis
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka
+zuul:
+  routes:
+    crowd-portal: # 自定义路由规则的名称，在底层的数据结构中是 Map 的键
+      service-id: crowd-authentication-consumer # 目标微服务名称（ZuulRoute 类型的一个属性）
+      path: /** # 用来代替目标微服务名称的路径（ZuulRoute 类型的一个属性）
+      # /**表示匹配多层路径，如果没有加**则不能匹配后续的多层路径了
+  ignored-services: "*" # 忽略所有微服务名称，让用户不能通过原来微服务名称访问
+  sensitive-headers: "*"# 在zuul向其他微服务重定向时保持原本头信息（请求头、响应头）
+
+# 由于在第一次请求中需要建立缓存、建立连接，操作较多，所以比较耗时，
+# 如果按照默认的ribbon超时时间，第一次请求会超过这个时间导致超时报错
+# 为了避免这个问题，把ribbon的超时时间延长
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000

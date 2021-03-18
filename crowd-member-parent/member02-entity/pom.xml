@@ -12,4 +12,11 @@
     <artifactId>member02-entity</artifactId>
 
 
+    <dependencies>
+        <!--导入第三方插件lombok依赖，不需要自己手动对entity实体类进行封装-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
 </project>

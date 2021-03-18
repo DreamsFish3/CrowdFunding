@@ -1,0 +1,37 @@
+server:
+  port: 4000
+
+spring:
+  application:
+    name: crowd-authentication-consumer
+  thymeleaf: #设置跳转视图的前后缀
+    prefix: classpath:/templates/
+    suffix: .html
+  redis: # 设置Redis所在的ip地址，有密码的需要验证密码
+    host: localhost
+    password: 123456
+  session: # springsession配置存储类型为Redis
+    store-type: redis
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka
+
+# 设置短信配置文件的属性值
+short:
+  message:
+    host: https://gyytz.market.alicloudapi.com
+    path: /sms/smsSend
+    method: POST
+    app-code: 9ace4c80ae6346fe853993f074782a3e
+    smsSignId: 2e65b1bb3d054466b82f0c9d125465e2
+    templateId: 908e94ccf08b4476ba6c876d13f084ad
+
+# 由于在第一次请求中需要建立缓存、建立连接，操作较多，所以比较耗时，
+# 如果按照默认的ribbon超时时间，第一次请求会超过这个时间导致超时报错
+# 为了避免这个问题，把ribbon的超时时间延长
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
+

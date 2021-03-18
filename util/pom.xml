@@ -17,5 +17,36 @@
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
+
+        <!--下面的都是第三方远程短信微服务需要使用的依赖，使用短信验证码来登录会员-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.15</version>
+        </dependency>
+        <!--因为依赖该util的member05-authentication-consumer的依赖中springboot自带，版本号要对应-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.9</version>
+        </dependency>
+        <!--httpclient包含了-->
+        <!--<dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.2.1</version>
+        </dependency>-->
+        <!--因为依赖该util的member05-authentication-consumer的依赖中springboot自带，版本一样-->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <!--因为依赖该util的member05-authentication-consumer的依赖中springboot自带，版本号要对应-->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+            <version>9.4.19.v20190610</version>
+        </dependency>
     </dependencies>
 </project>

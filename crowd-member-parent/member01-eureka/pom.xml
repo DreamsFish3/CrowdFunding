@@ -11,5 +11,11 @@
 
     <artifactId>member01-eureka</artifactId>
 
-
+    <dependencies>
+        <!--在Eureka工程导入Eureka注册中心服务依赖，开启Eureka-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+    </dependencies>
 </project>

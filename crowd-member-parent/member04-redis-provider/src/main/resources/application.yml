@@ -1,0 +1,17 @@
+server:
+  port: 3000
+
+spring:
+  application:
+    name: crowd-redis-provider
+  redis: # 设置Redis所在的ip地址，有密码的需要验证密码
+    host: localhost
+    password: 123456
+
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka
+

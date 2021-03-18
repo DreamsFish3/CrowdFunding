@@ -1,0 +1,18 @@
+# 设置端口号
+server:
+  port: 1000
+
+# 设置微服务名称
+spring:
+  application:
+    name: crowd-eureka
+
+eureka:
+  instance: # 设置ip地址
+    hostname: localhost
+  client:
+    register-with-eureka: false # 设置不注册自己
+    fetch-registry: false # 设置不取自己的注册表
+    service-url: # 设置客户端统一访问地址
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+
